@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.defaults import page_not_found
 
 
 posts = [
@@ -53,10 +54,13 @@ def index(request):
 
 
 def post_detail(request, id):
-    context = {
-        'post': posts[id],
-    }
-    return render(request, 'blog/detail.html', context)
+    for post in posts:
+        if post['id'] == id:
+            context = {
+                'post': post,
+            }
+            return render(request, 'blog/detail.html', context)
+    return page_not_found(request, None)
 
 
 def category_posts(request, category_slug):
